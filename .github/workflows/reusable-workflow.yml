@@ -1,0 +1,19 @@
+name: Reusable Workflow
+on:
+  workflow_call:
+jobs:
+  cache:
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+      - name: Caching dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        id: install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          npm ci

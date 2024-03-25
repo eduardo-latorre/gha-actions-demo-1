@@ -13,17 +13,22 @@ jobs:
       #   uses: ./.github/actions/cached-deps
       # - name: Output custom action info
       #   run: echo "Cache used? ${{ steps.cache-deps.outputs.used-cache }}"
-      - name: Caching dependencies
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        id: install
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          npm ci
+
+      - name: Using reusable workflow
+        uses: ./.github/workflows/reusable-workflow.yml
+
+      # - name: Caching dependencies
+      #   id: cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: node_modules
+      #     key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      # - name: Install dependencies
+      #   id: install
+      #   if: steps.cache.outputs.cache-hit != 'true'
+      #   run: |
+      #     npm ci
+
       - name: Test code
         id: run-tests
         run: npm run test
