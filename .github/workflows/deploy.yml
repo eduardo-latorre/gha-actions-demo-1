@@ -24,7 +24,6 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           npm ci
-          echo "cache='${{ inputs.caching }}'" >> $GITHUB_OUTPUT
       - name: Test code
         id: run-tests
         run: npm run test
@@ -33,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       # - name: Load & cache dependencies
       #   uses: ./.github/actions/cached-deps
       #   with: 
@@ -49,7 +48,6 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           npm ci
-          echo "cache='${{ inputs.caching }}'" >> $GITHUB_OUTPUT
       - name: Build website
         run: npm run build
       - name: Upload artifact
@@ -57,35 +55,28 @@ jobs:
         with:
           name: dist-files
           path: dist
-  # deploy:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Get code
-  #       uses: actions/checkout@v3
-  #     - name: Get build artifact
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: dist-files
-  #         path: ./dist
-  #     - name: Deploy site # Using JS action
-  #       id: deploy # Used in Output URL
-  #       # uses: ./.github/actions/deploy-s3-javascript
-  #       uses: ./.github/actions/deploy-s3-docker
-  #       env:
-  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #       with:
-  #         bucket: gha-custom-action-demo
-  #         bucket-region: us-east-1 # Not required
-  #         dist-folder: ./dist
-  #     - name: Output Web URL
-  #       run : | # Using the action out from JS
-  #         echo "Live URL: ${{ steps.deploy.outputs.website-url }}"
-  # # information: # Using JavaScript action
-  # #   runs-on: ubuntu-latest
-  # #   steps:
-  # #     - name: Get code # Needs to get the code first, since the action is in the code
-  # #       uses: actions/checkout@v3
-  # #     - name: Run custom action
-  # #       uses: ./.github/actions/deploy-s3-javascript
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+      - name: Get built artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist-files
+          path: ./dist
+      # - name: Deploy site
+      #   id: deploy
+      #   # uses: ./.github/actions/deploy-s3-javascript
+      #   uses: ./.github/actions/deploy-s3-docker
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #   with:
+      #     bucket: gha-custom-action-demo
+      #     bucket-region: us-east-1 # Not required
+      #     dist-folder: ./dist
+      # - name: Output Web URL
+      #   run : | # Using the action out from JS
+      #     echo "Live URL: ${{ steps.deploy.outputs.website-url }}"
