@@ -1,4 +1,4 @@
-# Example 2
+# Example 3 - Using custom actions
 name: Reusable Workflow
 on:
   workflow_call:
@@ -14,7 +14,7 @@ jobs:
         id: run-tests
         run: npm run test
 
-# Example 1
+# Example 2
 # name: Reusable Workflow
 # on:
 #   workflow_call:
