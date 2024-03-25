@@ -15,7 +15,6 @@ jobs:
         id: run-tests
         run: npm run test
 
-
 # Example 1
 # name: Reusable Workflow
 # on:
