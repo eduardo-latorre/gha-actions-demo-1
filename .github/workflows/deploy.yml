@@ -15,7 +15,7 @@ jobs:
       #   run: echo "Cache used? ${{ steps.cache-deps.outputs.used-cache }}"
       - name: Caching dependencies
         id: cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -39,7 +39,7 @@ jobs:
       #     caching: 'false'
       - name: Checking cached modules
         id: cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -77,6 +77,8 @@ jobs:
           aws-region: ${{ env.REGION }} 
       - name: Deploy static site to S3 bucket
         run: aws s3 sync ./dist s3://${{ env.BUCKET_NAME }} --delete
+      - name: Output website url
+        run: echo "http://${{ env.BUCKET_NAME }}.s3-website-${{ env.REGION }}.amazonaws.com"
       # - name: Deploy site
       #   id: deploy
       #   # uses: ./.github/actions/deploy-s3-javascript
