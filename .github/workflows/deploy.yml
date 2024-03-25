@@ -1,4 +1,4 @@
-name: Custom Actions
+name: My Workflow
 on:
   push:
     branches:
@@ -13,40 +13,50 @@ jobs:
       #   uses: ./.github/actions/cached-deps
       # - name: Output custom action info
       #   run: echo "Cache used? ${{ steps.cache-deps.outputs.used-cache }}"
-      - name: Cache dependencies
-        if: inputs.caching # retrieving caching input value
+      - name: Caching dependencies
         id: cache
         uses: actions/cache@v3
         with:
           path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
-        id: install # To be used in the outputs
-        if: steps.cache.outputs.cache-hit != 'true' || inputs.caching != 'true' # If there's no cache yet or if caching is false, will install
-        run: | # Pass cache input value to Github file
+        id: install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
           npm ci
           echo "cache='${{ inputs.caching }}'" >> $GITHUB_OUTPUT
-
       - name: Test code
         id: run-tests
         run: npm run test
-  # build:
-  #   needs: test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Get code
-  #       uses: actions/checkout@v3
-  #     - name: Load & cache dependencies # Using my custom action
-  #       uses: ./.github/actions/cached-deps # Calling the action by relative path
-  #       with: 
-  #         caching: 'false' # No caching (just for testing purpouses)
-  #     - name: Build website
-  #       run: npm run build
-  #     - name: Upload artifact
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: dist-files
-  #         path: dist
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      # - name: Load & cache dependencies
+      #   uses: ./.github/actions/cached-deps
+      #   with: 
+      #     caching: 'false'
+      - name: Checking cached modules
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        id: install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          npm ci
+          echo "cache='${{ inputs.caching }}'" >> $GITHUB_OUTPUT
+      - name: Build website
+        run: npm run build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-files
+          path: dist
   # deploy:
   #   needs: build
   #   runs-on: ubuntu-latest
