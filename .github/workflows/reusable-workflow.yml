@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Using my own action
-        uses: eduardo-latorre/gha-actions-demo-2
+        uses: eduardo-latorre/gha-actions-demo-2@v1
 
       - name: Test code
         id: run-tests
