@@ -3,9 +3,8 @@ on:
   workflow_call:
 jobs:
   cache:
+    runs-on: ubuntu-latest
     steps:
-      - name: Get code
-        uses: actions/checkout@v4
       - name: Caching dependencies
         id: cache
         uses: actions/cache@v4
