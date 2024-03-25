@@ -1,0 +1,67 @@
+name: Custom Actions
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      # - name: Load & cache dependencies
+      #   uses: ./.github/actions/cached-deps
+      # - name: Output custom action info
+      #   run: echo "Cache used? ${{ steps.cache-deps.outputs.used-cache }}"
+      - name: Test code
+        id: run-tests
+        run: npm run test
+  # build:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Get code
+  #       uses: actions/checkout@v3
+  #     - name: Load & cache dependencies # Using my custom action
+  #       uses: ./.github/actions/cached-deps # Calling the action by relative path
+  #       with: 
+  #         caching: 'false' # No caching (just for testing purpouses)
+  #     - name: Build website
+  #       run: npm run build
+  #     - name: Upload artifact
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: dist-files
+  #         path: dist
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Get code
+  #       uses: actions/checkout@v3
+  #     - name: Get build artifact
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: dist-files
+  #         path: ./dist
+  #     - name: Deploy site # Using JS action
+  #       id: deploy # Used in Output URL
+  #       # uses: ./.github/actions/deploy-s3-javascript
+  #       uses: ./.github/actions/deploy-s3-docker
+  #       env:
+  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       with:
+  #         bucket: gha-custom-action-demo
+  #         bucket-region: us-east-1 # Not required
+  #         dist-folder: ./dist
+  #     - name: Output Web URL
+  #       run : | # Using the action out from JS
+  #         echo "Live URL: ${{ steps.deploy.outputs.website-url }}"
+  # # information: # Using JavaScript action
+  # #   runs-on: ubuntu-latest
+  # #   steps:
+  # #     - name: Get code # Needs to get the code first, since the action is in the code
+  # #       uses: actions/checkout@v3
+  # #     - name: Run custom action
+  # #       uses: ./.github/actions/deploy-s3-javascript
