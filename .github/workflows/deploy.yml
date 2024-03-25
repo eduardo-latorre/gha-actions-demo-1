@@ -15,17 +15,8 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
-      - name: Checking cached modules
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        id: install
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          npm ci
+      - name: Using my own action
+        uses: eduardo-latorre/gha-actions-demo-2@v1
       - name: Build website
         run: npm run build
       - name: Upload artifact

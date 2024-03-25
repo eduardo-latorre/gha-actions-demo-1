@@ -1,3 +1,4 @@
+# Example 2
 name: Reusable Workflow
 on:
   workflow_call:
@@ -7,10 +8,8 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
-
       - name: Using my own action
-        uses: eduardo-latorre/gha-actions-demo-2@v1
-
+        uses: eduardo-latorre/gha-actions-demo-2@v1 # The action must be released with a tag
       - name: Test code
         id: run-tests
         run: npm run test
