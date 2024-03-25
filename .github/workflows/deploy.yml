@@ -1,3 +1,4 @@
+# Reusing workflows is only applicable within the scope of a job
 name: My Workflow
 on:
   push:
@@ -30,10 +31,6 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
-      # - name: Load & cache dependencies
-      #   uses: ./.github/actions/cached-deps
-      #   with: 
-      #     caching: 'false'
       - name: Checking cached modules
         id: cache
         uses: actions/cache@v4
@@ -76,6 +73,7 @@ jobs:
         run: aws s3 sync ./dist s3://${{ env.BUCKET_NAME }} --delete
       - name: Output website url
         run: echo "http://${{ env.BUCKET_NAME }}.s3-website-${{ env.REGION }}.amazonaws.com"
+
       # - name: Deploy site
       #   id: deploy
       #   # uses: ./.github/actions/deploy-s3-javascript
