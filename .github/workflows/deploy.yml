@@ -58,6 +58,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    env:
+      BUCKET_NAME: gha-custom-action-demo
+      REGION: us-east-1
     steps:
       - name: Get code
         uses: actions/checkout@v4
@@ -66,6 +69,14 @@ jobs:
         with:
           name: dist-files
           path: ./dist
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.REGION }} 
+      - name: Deploy static site to S3 bucket
+        run: aws s3 sync ./dist s3://${{ env.BUCKET_NAME }} --delete
       # - name: Deploy site
       #   id: deploy
       #   # uses: ./.github/actions/deploy-s3-javascript
