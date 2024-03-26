@@ -1,6 +1,4 @@
-# Reusing workflows is only applicable within the scope of a job
-
-# Example 3 - Using custom actions
+# Example 4 - Using JS action
 name: My Workflow
 on:
   push:
@@ -41,16 +39,71 @@ jobs:
         with:
           name: dist-files
           path: ./dist
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Deploy site # Using JS action
+        id: deploy # Used in Output URL
+        uses: eduardo-latorre/gha-actions-demo-3@v1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.REGION }} 
-      - name: Deploy static site to S3 bucket
-        run: aws s3 sync ./dist s3://${{ env.BUCKET_NAME }} --delete
-      - name: Output website url
-        run: echo "http://${{ env.BUCKET_NAME }}.s3-website-${{ env.REGION }}.amazonaws.com"
+          bucket: ${{ env.BUCKET_NAME }}
+          bucket-region: ${{ env.REGION }}
+          dist-folder: ./dist
+      - name: Output Web URL # Using the action out from JS
+        run : |
+          echo "Website URL: ${{ steps.deploy.outputs.website-url }}"
+
+# # Example 3 - Using custom actions
+# name: My Workflow
+# on:
+#   push:
+#     branches:
+#       - main
+#   workflow_dispatch:
+#     branches:
+#       - main
+# jobs:
+#   test:
+#     uses: ./.github/workflows/reusable-workflow.yml # Reusing an external workflow
+#   build:
+#     needs: test
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Get code
+#         uses: actions/checkout@v4
+#       - name: Using my own action
+#         uses: eduardo-latorre/gha-actions-demo-2@v1
+#       - name: Build website
+#         run: npm run build
+#       - name: Upload artifact
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: dist-files
+#           path: dist
+#   deploy:
+#     needs: build
+#     runs-on: ubuntu-latest
+#     env:
+#       BUCKET_NAME: gha-custom-action-demo
+#       REGION: us-east-1
+#     steps:
+#       - name: Get code
+#         uses: actions/checkout@v4
+#       - name: Get built artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: dist-files
+#           path: ./dist
+#       - name: Configure AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v4
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ${{ env.REGION }} 
+#       - name: Deploy static site to S3 bucket
+#         run: aws s3 sync ./dist s3://${{ env.BUCKET_NAME }} --delete
+#       - name: Output website url
+#         run: echo "http://${{ env.BUCKET_NAME }}.s3-website-${{ env.REGION }}.amazonaws.com"
 
 # # Example 2 - Using reusable workflows
 # name: My Workflow
@@ -60,7 +113,7 @@ jobs:
 #       - main
 # jobs:
 #   test:
-#     uses: ./.github/workflows/reusable-workflow.yml # Reusing an external workflow
+#     uses: ./.github/workflows/reusable-workflow.yml # Reusing an external workflow # Reusing external workflow
 #   build:
 #     needs: test
 #     runs-on: ubuntu-latest
