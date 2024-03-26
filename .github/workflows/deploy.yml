@@ -1,4 +1,4 @@
-# Example 4 - Using JS action
+# Example 5 - Using Docker
 name: My Workflow
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 jobs:
   test:
-    uses: ./.github/workflows/reusable-workflow.yml # Reusing an external workflow
+    uses: ./.github/workflows/reusable-workflow.yml
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -41,7 +41,7 @@ jobs:
           path: ./dist
       - name: Deploy site # Using JS action
         id: deploy # Used in Output URL
-        uses: eduardo-latorre/gha-actions-demo-3@v1
+        uses: eduardo-latorre/gha-actions-demo-3@v2
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -52,6 +52,61 @@ jobs:
       - name: Output Web URL # Using the action out from JS
         run : |
           echo "Website URL: ${{ steps.deploy.outputs.website-url }}"
+
+# # Example 4 - Using JS action
+# name: My Workflow
+# on:
+#   push:
+#     branches:
+#       - main
+#   workflow_dispatch:
+#     branches:
+#       - main
+# jobs:
+#   test:
+#     uses: ./.github/workflows/reusable-workflow.yml
+#   build:
+#     needs: test
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Get code
+#         uses: actions/checkout@v4
+#       - name: Using my own action
+#         uses: eduardo-latorre/gha-actions-demo-2@v1
+#       - name: Build website
+#         run: npm run build
+#       - name: Upload artifact
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: dist-files
+#           path: dist
+#   deploy:
+#     needs: build
+#     runs-on: ubuntu-latest
+#     env:
+#       BUCKET_NAME: gha-custom-action-demo
+#       REGION: us-east-1
+#     steps:
+#       - name: Get code
+#         uses: actions/checkout@v4
+#       - name: Get built artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: dist-files
+#           path: ./dist
+#       - name: Deploy site # Using JS action
+#         id: deploy # Used in Output URL
+#         uses: eduardo-latorre/gha-actions-demo-3@v1
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         with:
+#           bucket: ${{ env.BUCKET_NAME }}
+#           bucket-region: ${{ env.REGION }}
+#           dist-folder: ./dist
+#       - name: Output Web URL # Using the action out from JS
+#         run : |
+#           echo "Website URL: ${{ steps.deploy.outputs.website-url }}"
 
 # # Example 3 - Using custom actions
 # name: My Workflow
@@ -64,7 +119,7 @@ jobs:
 #       - main
 # jobs:
 #   test:
-#     uses: ./.github/workflows/reusable-workflow.yml # Reusing an external workflow
+#     uses: ./.github/workflows/reusable-workflow.yml
 #   build:
 #     needs: test
 #     runs-on: ubuntu-latest
