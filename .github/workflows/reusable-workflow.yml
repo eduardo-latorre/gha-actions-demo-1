@@ -1,4 +1,5 @@
-# Example 3 - Using custom actions
+Example 2
+- Reusing workflows is only applicable within the scope of a job
 name: Reusable Workflow
 on:
   workflow_call:
@@ -8,14 +9,25 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
-      - name: Using my own action
-        uses: eduardo-latorre/gha-actions-demo-2@v1 # The action must be released with a tag
+
+      - name: Caching dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        id: install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          npm ci
+
       - name: Test code
         id: run-tests
         run: npm run test
 
-# Example 2
-# - Reusing workflows is only applicable within the scope of a job
+
+# # Example 3 - Using custom actions
 # name: Reusable Workflow
 # on:
 #   workflow_call:
@@ -25,19 +37,8 @@ jobs:
 #     steps:
 #       - name: Get code
 #         uses: actions/checkout@v4
-
-#       - name: Caching dependencies
-#         id: cache
-#         uses: actions/cache@v4
-#         with:
-#           path: node_modules
-#           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-#       - name: Install dependencies
-#         id: install
-#         if: steps.cache.outputs.cache-hit != 'true'
-#         run: |
-#           npm ci
-
+#       - name: Using my own action
+#         uses: eduardo-latorre/gha-actions-demo-2@v1 # The action must be released with a tag
 #       - name: Test code
 #         id: run-tests
 #         run: npm run test
