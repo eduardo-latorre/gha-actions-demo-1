@@ -1,5 +1,5 @@
 # Example 2
-- Reusing workflows is only applicable within the scope of a job
+# - Reusing workflows is only applicable within the scope of a job
 name: Reusable Workflow
 on:
   workflow_call:

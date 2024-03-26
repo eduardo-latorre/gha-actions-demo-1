@@ -55,8 +55,6 @@ jobs:
       BUCKET_NAME: gha-custom-action-demo
       REGION: us-east-1
     steps:
-      # - name: Get code
-      #   uses: actions/checkout@v4
       - name: Get built artifact
         uses: actions/download-artifact@v4
         with:
