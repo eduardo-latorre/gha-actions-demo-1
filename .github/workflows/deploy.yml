@@ -14,7 +14,13 @@ jobs:
       - name: Checkout gitlab repo
         uses: actions/checkout@v4
         with:
-          repository: https://gitlab.com/my-group4174747/node-website.git
+          repository: my-group4174747/node-website
+          # repository: ${{ inputs.git_repo }}
+          # token: ${{ inputs.git_token }}
+          # ref: ${{ inputs.ref }}
+          # path: ${{ env.DEST_DIR }}
+          github-server-url: https://gitlab.com
+
   # test:
   #   uses: ./.github/workflows/reusable-workflow.yml
   # build:
