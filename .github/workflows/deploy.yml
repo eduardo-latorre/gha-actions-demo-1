@@ -15,9 +15,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: my-group4174747/node-website
-          # repository: ${{ inputs.git_repo }}
-          # token: ${{ inputs.git_token }}
-          # ref: ${{ inputs.ref }}
+          token: glpat-QyxmV9dzWj_yffybDXjA
+          ref: main
           # path: ${{ env.DEST_DIR }}
           github-server-url: https://gitlab.com
 
