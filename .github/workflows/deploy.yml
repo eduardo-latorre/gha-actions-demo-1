@@ -23,6 +23,7 @@ jobs:
           pwd
           ls -l
   test:
+    needs: checkout-gitlab-repo
     uses: ./.github/workflows/reusable-workflow.yml
 
   # build:
