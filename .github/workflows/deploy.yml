@@ -15,17 +15,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: my-group4174747/node-website
-          token: glpat-QyxmV9dzWj_yffybDXjA
+          token: ${{ secrets.GITLAB_SECRET }}
           ref: main
-          # path: ${{ env.DEST_DIR }}
           github-server-url: https://gitlab.com
       - name: Print dir
         run: |
           pwd
           ls -l
+  test:
+    uses: ./.github/workflows/reusable-workflow.yml
 
-  # test:
-  #   uses: ./.github/workflows/reusable-workflow.yml
   # build:
   #   needs: test
   #   runs-on: ubuntu-latest
