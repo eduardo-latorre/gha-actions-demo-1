@@ -19,6 +19,10 @@ jobs:
           ref: main
           # path: ${{ env.DEST_DIR }}
           github-server-url: https://gitlab.com
+      - name: Print dir
+        run: |
+          pwd
+          ls -l
 
   # test:
   #   uses: ./.github/workflows/reusable-workflow.yml
