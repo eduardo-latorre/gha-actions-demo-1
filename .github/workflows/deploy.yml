@@ -12,6 +12,5 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'my-group/node-website'
-          url: 'https://gitlab.com/eduardojavier.lv/cars-api.git'
           ref: 'master'
           token: 'glpat-ykUr4y_iacN2YLJytdzs'
