@@ -14,4 +14,4 @@ jobs:
           repository: 'my-group4174747/node-website'
           ref: 'master'
           token: 'glpat-ykUr4y_iacN2YLJytdzs'
-          github-server-url: gitlab.com
+          github-server-url: 'https://gitlab.com'
