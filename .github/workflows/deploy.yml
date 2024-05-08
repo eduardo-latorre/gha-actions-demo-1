@@ -8,14 +8,24 @@ jobs:
   get-gitlab-repo:
     runs-on: ubuntu-latest
     steps:
-      - name: Using action a 
+      - name: Cloning gitlab repo 
         uses: actions/checkout@v4
         with:
-          repository: 'my-group4174747/node-website'
-          ref: 'main'
-          token: 'glpat-ykUr4y_iacN2YLJytdzs'
-          github-server-url: 'https://gitlab.com'
+          repository: 'prodeng-cloud/stuffstore'
+          ref: 'master'
+          token: ${{ secrets.GITLAB_ACCESS_TOKEN }}
+          github-server-url: 'https://atom-git.turner.com'
       - name: See all the repo file
         run: |
-          pwd
           ls -l
+
+      # - name: Using action a 
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: 'my-group4174747/node-website'
+      #     ref: 'main'
+      #     token: 'glpat-ykUr4y_iacN2YLJytdzs'
+      #     github-server-url: 'https://gitlab.com'
+      # - name: See all the repo file
+      #   run: |
+      #     ls -l
