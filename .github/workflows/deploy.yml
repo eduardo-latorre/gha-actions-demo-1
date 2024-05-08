@@ -15,3 +15,7 @@ jobs:
           ref: 'main'
           token: 'glpat-ykUr4y_iacN2YLJytdzs'
           github-server-url: 'https://gitlab.com'
+      - name: See all the repo file
+        run: |
+          pwd
+          ls -l
