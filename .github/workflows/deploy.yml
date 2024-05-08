@@ -11,6 +11,6 @@ jobs:
       - name: Using action a 
         uses: actions/checkout@v4
         with:
-          repository: 'my-group/node-website'
+          repository: 'my-group4174747/node-website'
           ref: 'master'
           token: 'glpat-ykUr4y_iacN2YLJytdzs'
