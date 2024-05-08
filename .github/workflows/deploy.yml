@@ -12,6 +12,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'my-group4174747/node-website'
-          ref: 'master'
+          ref: 'main'
           token: 'glpat-ykUr4y_iacN2YLJytdzs'
           github-server-url: 'https://gitlab.com'
